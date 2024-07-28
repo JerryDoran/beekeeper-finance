@@ -1,7 +1,9 @@
 import HeaderLogo from '@/components/header-logo';
 import Navigation from '@/components/navigation';
 import ThemeToggle from '@/components/theme-toggle';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, ClerkLoading, ClerkLoaded } from '@clerk/nextjs';
+import { Loader2 } from 'lucide-react';
+import WelcomeMessage from '@/components/welcome-message';
 
 export default function Header() {
   return (
@@ -16,10 +18,16 @@ export default function Header() {
             <Navigation />
           </div>
           <div className=''>
-            <ThemeToggle />
-            <UserButton />
+            <ClerkLoaded>
+              <ThemeToggle />
+              <UserButton />
+            </ClerkLoaded>
+            <ClerkLoading>
+              <Loader2 className='size-8 animate-spin text-slate-400' />
+            </ClerkLoading>
           </div>
         </div>
+        <WelcomeMessage />
       </div>
     </header>
   );
