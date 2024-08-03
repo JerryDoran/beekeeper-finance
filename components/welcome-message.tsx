@@ -10,7 +10,7 @@ export default function WelcomeMessage() {
         Welcome Back{isLoaded ? ', ' : ' '}
         {user?.firstName} 👋
       </h2>
-      <p className='text-sm lg:text-base text-[#89b6fd]'>
+      <p className='text-sm lg:text-base text-sky-300/50'>
         This is your financial overview report
       </p>
     </div>
