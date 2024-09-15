@@ -1,7 +1,7 @@
 'use client';
 
-import { useOpenAccount } from '@/features/accounts/hooks/use-open-account';
-import { useDeleteAccount } from '@/features/accounts/api/use-delete-account';
+import { useOpenCategory } from '@/features/categories/hooks/use-open-category';
+import { useDeleteCategory } from '@/features/categories/api/use-delete-category';
 import { useConfirm } from '@/hooks/use-confirm';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,10 +19,10 @@ type ActionProps = {
 export default function Actions({ id }: ActionProps) {
   const [ConfirmDialog, confirm] = useConfirm(
     'Are you sure?',
-    'You are about to delete this account'
+    'You are about to delete this category'
   );
-  const { onOpen } = useOpenAccount();
-  const deleteMutation = useDeleteAccount(id);
+  const { onOpen } = useOpenCategory();
+  const deleteMutation = useDeleteCategory(id);
 
   async function handleDelete() {
     const ok = await confirm();

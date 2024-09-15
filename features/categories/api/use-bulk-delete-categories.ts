@@ -4,31 +4,31 @@ import { toast } from 'sonner';
 import { InferRequestType, InferResponseType } from 'hono';
 
 type ResponseType = InferResponseType<
-  (typeof client.api.accounts)['bulk-delete']['$post']
+  (typeof client.api.categories)['bulk-delete']['$post']
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.accounts)['bulk-delete']['$post']
+  (typeof client.api.categories)['bulk-delete']['$post']
 >['json'];
 
-export function useBulkDeleteAccounts() {
+export function useBulkDeleteCategories() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (json) => {
-      const response = await client.api.accounts['bulk-delete']['$post']({
+      const response = await client.api.categories['bulk-delete']['$post']({
         json,
       });
       return await response.json();
     },
     onSuccess: () => {
-      toast.success('Account(s) deleted!');
-      // will invalidate all queries with the query key of accounts
-      // meaning the accounts will get refetched when a new account is created
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      toast.success('Categories deleted!');
+      // will invalidate all queries with the query key of categories
+      // meaning the categories will get refetched when a new category is created
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
       // TODO: Also invalidate summary
     },
     onError: () => {
-      toast.error('Failed to delete account(s)!');
+      toast.error('Failed to delete categories!');
     },
   });
 

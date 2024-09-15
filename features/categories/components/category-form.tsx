@@ -13,15 +13,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { insertAccountSchema } from '@/db/schema';
+import { insertCategorySchema } from '@/db/schema';
 
-const formSchema = insertAccountSchema.pick({
+const formSchema = insertCategorySchema.pick({
   name: true,
 });
 
 type FormValues = z.input<typeof formSchema>;
 
-type AccountFormProps = {
+type CategoryFormProps = {
   id?: string;
   defaultValues?: FormValues;
   onSubmit: (values: FormValues) => void;
@@ -29,13 +29,13 @@ type AccountFormProps = {
   disabled?: boolean;
 };
 
-export default function AccountForm({
+export default function CategoryForm({
   id,
   defaultValues,
   onSubmit,
   onDelete,
   disabled,
-}: AccountFormProps) {
+}: CategoryFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
@@ -67,7 +67,7 @@ export default function AccountForm({
               <FormControl>
                 <Input
                   disabled={disabled}
-                  placeholder='e.g. Cash, Bank, Credit Card'
+                  placeholder='e.g. Food, Travel, etc.'
                   // spreading the field properties assigns all the necessary input
                   // fields so you don't have to manually assign them one at a time.
                   // ex: onChange={(e)=>e.target.value}
@@ -78,7 +78,7 @@ export default function AccountForm({
           )}
         />
         <Button className='w-full' disabled={disabled}>
-          {id ? 'Save changes' : 'Create account'}
+          {id ? 'Save changes' : 'Create category'}
         </Button>
         {/* using !! in front of a property turns it into a boolean value */}
         {!!id && (
@@ -90,7 +90,7 @@ export default function AccountForm({
             variant='outline'
           >
             <Trash className='size-4 mr-2' />
-            Delete Account
+            Delete Category
           </Button>
         )}
       </form>

@@ -1,32 +1,32 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { client } from '@/lib/hono';
 import { toast } from 'sonner';
-import { InferRequestType, InferResponseType } from 'hono';
+import { InferResponseType } from 'hono';
 
 type ResponseType = InferResponseType<
-  (typeof client.api.accounts)[':id']['$delete']
+  (typeof client.api.categories)[':id']['$delete']
 >;
 
-export function useDeleteAccount(id?: string) {
+export function useDeleteCategory(id?: string) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error>({
     mutationFn: async () => {
-      const response = await client.api.accounts[':id']['$delete']({
+      const response = await client.api.categories[':id']['$delete']({
         param: { id },
       });
       return await response.json();
     },
     onSuccess: () => {
-      toast.success('Account deleted!');
+      toast.success('Category deleted!');
       // will invalidate all queries with the query keys listed
-      // meaning the accounts will get refetched when a new account is created
-      queryClient.invalidateQueries({ queryKey: ['account', { id }] });
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      // meaning the categories will get refetched when a new category is created
+      queryClient.invalidateQueries({ queryKey: ['category', { id }] });
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
       // TODO: Invalidate summary and transactions
     },
     onError: () => {
-      toast.error('Failed to delete account!');
+      toast.error('Failed to delete category!');
     },
   });
 
