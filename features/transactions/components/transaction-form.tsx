@@ -13,29 +13,46 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { insertAccountSchema } from '@/db/schema';
+import { insertTransactionSchema } from '@/db/schema';
+import Select from '@/components/select';
 
-const formSchema = insertAccountSchema.pick({
-  name: true,
+const formSchema = z.object({
+  date: z.coerce.date(),
+  account: z.string(),
+  categoryId: z.string().nullable().optional(),
+  payee: z.string(),
+  amount: z.string(),
+  notes: z.string().nullable().optional(),
 });
 
-type FormValues = z.input<typeof formSchema>;
+const apiSchema = insertTransactionSchema.omit({ id: true });
 
-type AccountFormProps = {
+type FormValues = z.input<typeof formSchema>;
+type ApiFormValues = z.input<typeof apiSchema>;
+
+type TransactionFormProps = {
   id?: string;
   defaultValues?: FormValues;
-  onSubmit: (values: FormValues) => void;
+  onSubmit: (values: ApiFormValues) => void;
   onDelete?: () => void;
   disabled?: boolean;
+  accountOptions: { label: string; value: string }[];
+  categoryOptions: { label: string; value: string }[];
+  onCreateAccount: (name?: string) => void;
+  onCreateCategory: (name: string) => void;
 };
 
-export default function AccountForm({
+export default function TransactionForm({
   id,
   defaultValues,
   onSubmit,
   onDelete,
   disabled,
-}: AccountFormProps) {
+  accountOptions,
+  categoryOptions,
+  onCreateAccount,
+  onCreateCategory,
+}: TransactionFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
@@ -45,7 +62,7 @@ export default function AccountForm({
   // ensures no invalid form data is submitted
   function handleSubmit(values: FormValues) {
     console.log(values);
-    onSubmit(values);
+    // onSubmit(values);
   }
 
   function handleDelete() {
@@ -59,19 +76,19 @@ export default function AccountForm({
         className='space-y-4 pt-4'
       >
         <FormField
-          name='name'
+          name='account'
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Account</FormLabel>
               <FormControl>
-                <Input
+                <Select
+                  placeholder='Select an account'
+                  options={accountOptions}
+                  onCreate={onCreateAccount}
+                  value={field.value}
+                  onChange={field.onChange}
                   disabled={disabled}
-                  placeholder='e.g. Cash, Bank, Credit Card'
-                  // spreading the field properties assigns all the necessary input
-                  // fields so you don't have to manually assign them one at a time.
-                  // ex: onChange={(e)=>e.target.value}
-                  {...field}
                 />
               </FormControl>
             </FormItem>

@@ -13,6 +13,8 @@ import {
   SheetTitle,
   SheetHeader,
 } from '@/components/ui/sheet';
+import TransactionForm from '@/features/transactions/components/transaction-form';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = insertTransactionSchema.omit({
   id: true,
@@ -23,7 +25,7 @@ type FormValues = z.input<typeof formSchema>;
 export default function NewTransactionSheet() {
   const { isOpen, onClose } = useNewTransaction();
 
-  const mutation = useCreateTransactions();
+  const createTransactionMutation = useCreateTransactions();
 
   // Categories
   const categoryQuery = useGetCategories();
@@ -43,8 +45,15 @@ export default function NewTransactionSheet() {
     value: account.id,
   }));
 
+  const isPending =
+    createTransactionMutation.isPending ||
+    categoryMutation.isPending ||
+    accountMutation.isPending;
+
+  const isLoading = categoryQuery.isLoading || accountQuery.isLoading;
+
   function onSubmit(values: FormValues) {
-    mutation.mutate(values, {
+    createTransactionMutation.mutate(values, {
       onSuccess: () => {
         onClose();
       },
@@ -58,13 +67,20 @@ export default function NewTransactionSheet() {
           <SheetTitle>New Transaction</SheetTitle>
           <SheetDescription>Add a new transaction.</SheetDescription>
         </SheetHeader>
-        {/* <AccountForm
-          onSubmit={onSubmit}
-          disabled={mutation.isPending}
-          defaultValues={{
-            name: '',
-          }}
-        /> */}
+        {isLoading ? (
+          <div className='absolute inset-0 flex items-center justify-center'>
+            <Loader2 className='size-4 text-muted-foreground animate-spin' />
+          </div>
+        ) : (
+          <TransactionForm
+            onSubmit={onSubmit}
+            disabled={isPending}
+            categoryOptions={categoryOptions}
+            onCreateCategory={onCreateCategory}
+            accountOptions={accountOptions}
+            onCreateAccount={onCreateAccount}
+          />
+        )}
       </SheetContent>
     </Sheet>
   );
