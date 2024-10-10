@@ -30,7 +30,14 @@ export default function NewTransactionSheet() {
   // Categories
   const categoryQuery = useGetCategories();
   const categoryMutation = useCreateCategory();
-  const onCreateCategory = (name: string) => categoryMutation.mutate({ name });
+  const onCreateCategory = (name?: string) => {
+    if (name) {
+      categoryMutation.mutate({ name });
+    } else {
+      console.error('Category name is required');
+    }
+  };
+
   const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
     label: category.name,
     value: category.id,
@@ -39,7 +46,13 @@ export default function NewTransactionSheet() {
   // Accounts
   const accountQuery = useGetAccounts();
   const accountMutation = useCreateAccounts();
-  const onCreateAccount = (name: string) => accountMutation.mutate({ name });
+  const onCreateAccount = (name?: string) => {
+    if (name) {
+      accountMutation.mutate({ name });
+    } else {
+      console.error('Account name is required');
+    }
+  };
   const accountOptions = (accountQuery.data ?? []).map((account) => ({
     label: account.name,
     value: account.id,

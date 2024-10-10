@@ -18,7 +18,7 @@ import Select from '@/components/select';
 
 const formSchema = z.object({
   date: z.coerce.date(),
-  account: z.string(),
+  accountId: z.string(),
   categoryId: z.string().nullable().optional(),
   payee: z.string(),
   amount: z.string(),
@@ -39,7 +39,7 @@ type TransactionFormProps = {
   accountOptions: { label: string; value: string }[];
   categoryOptions: { label: string; value: string }[];
   onCreateAccount: (name?: string) => void;
-  onCreateCategory: (name: string) => void;
+  onCreateCategory: (name?: string) => void;
 };
 
 export default function TransactionForm({
@@ -76,7 +76,7 @@ export default function TransactionForm({
         className='space-y-4 pt-4'
       >
         <FormField
-          name='account'
+          name='accountId'
           control={form.control}
           render={({ field }) => (
             <FormItem>
@@ -86,6 +86,25 @@ export default function TransactionForm({
                   placeholder='Select an account'
                   options={accountOptions}
                   onCreate={onCreateAccount}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='categoryId'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <Select
+                  placeholder='Select a category'
+                  options={categoryOptions}
+                  onCreate={onCreateCategory}
                   value={field.value}
                   onChange={field.onChange}
                   disabled={disabled}
