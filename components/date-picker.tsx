@@ -5,7 +5,11 @@ import { SelectSingleEventHandler } from 'react-day-picker';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 type DatePickerProps = {
   value?: Date;
@@ -33,8 +37,15 @@ export default function DatePicker({
           {value ? format(value, 'PPP') : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-
-      <Calendar></Calendar>
+      <PopoverContent>
+        <Calendar
+          mode='single'
+          selected={value}
+          onSelect={onChange}
+          disabled={disabled}
+          initialFocus
+        />
+      </PopoverContent>
     </Popover>
   );
 }
