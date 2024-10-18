@@ -36,17 +36,27 @@ export default function Select({
       styles={{
         control: (base) => ({
           ...base,
-          borderColor: '#e2e8f0',
+          background: 'transparent',
+          borderColor: '#273343',
           ':hover': {
             borderColor: '#e2e8f0',
           },
         }),
         option: (base) => ({
           ...base,
-          backgroundColor: '#000',
+          color: '#000',
+          background: 'transparent',
           ':hover': {
-            backgroundColor: '#222',
+            backgroundColor: '#eee',
           },
+        }),
+        singleValue: (base) => ({
+          ...base,
+          color: '#fff', // Changing selected option text color
+        }),
+        placeholder: (base) => ({
+          ...base,
+          color: '#929eb3', // Changing placeholder text color
         }),
       }}
       value={formattedValue}
